@@ -146,7 +146,6 @@ namespace PDFSlicer
                     }
                     catch (Exception ex)
                     {
-                        // Логирование ошибки парсинга строки
                         Console.WriteLine($"Ошибка обработки строки {row}: {ex.Message}");
                     }
                 }
@@ -157,27 +156,18 @@ namespace PDFSlicer
 
         private static string FormatDate(string date)
         {
-            if (DateTime.TryParse(date, out DateTime result))
+            if (DateTime.TryParse(date, out var result))
             {
                 return result.ToString("dd.MM.yy");
             }
 
-            if (date.Length == 10) // dd.MM.yyyy
+            return date.Length switch
             {
-                return date.Substring(0, 5) + date.Substring(8, 2); // -> dd.MM.yy
-            }
-            else if (date.Length == 8) // dd.MM.yy
-            {
-                return date;
-            }
-            else if (date.Length == 5) // dd.MM
-            {
-                return date + DateTime.Now.ToString(".yy"); // -> dd.MM.yy
-            }
-            else
-            {
-                return "01.01.00"; // По умолчанию
-            }
+                10 => date.Substring(0, 5) + date.Substring(8, 2), // dd.MM.yyyy
+                8 => date, // dd.MM.yy
+                5 => date + DateTime.Now.ToString(".yy"), // dd.MM
+                _ => "01.01.00"
+            };
         }
     }
 
