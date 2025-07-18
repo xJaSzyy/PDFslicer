@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using PdfSharpCore.Pdf;
+using PDFSlicer.Models;
 
 namespace PDFSlicer
 {
@@ -113,18 +114,6 @@ namespace PDFSlicer
         }
     }
 
-    public class ExcelRecord
-    {
-        public int RowNumber { get; set; }
-        public string RegistrationNumber { get; set; }  // № регистрационный
-        public string DocumentName { get; set; }         // Наименование документа
-        public string CertificateNumber { get; set; }    // Серия, номер удостоверения
-        public string IssueDate { get; set; }           // Дата выдачи удостоверения
-        public string FullName { get; set; }             // ФИО
-        public string ProgramName { get; set; }          // Наименование программы
-        public string Hours { get; set; }               // Кол-во часов
-    }
-
     public static class ExcelParser
     {
         public static Dictionary<string, ExcelRecord> Parse(string filePath, int startRow)
@@ -192,13 +181,7 @@ namespace PDFSlicer
         }
     }
 
-    public class PdfInfo
-    {
-        public string CertificateRange { get; set; }
-        public string IssueDate { get; set; }
-        public string ProgramName { get; set; }
-        public string Hours { get; set; }
-    }
+    
 
     public static class PdfProcessor
     {
