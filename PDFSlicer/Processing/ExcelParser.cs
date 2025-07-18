@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ClosedXML.Excel;
+using PDFSlicer.Enums;
 using PDFSlicer.Models;
 
 namespace PDFSlicer.Processing;
@@ -11,34 +12,32 @@ public static class ExcelParser
     {
         var records = new Dictionary<string, ExcelRecord>();
 
-        using (var workbook = new XLWorkbook(filePath))
+        using var workbook = new XLWorkbook(filePath);
+        var worksheet = workbook.Worksheet(1);
+        var lastRow = worksheet.LastRowUsed()!.RowNumber();
+
+        for (var row = startRow; row <= lastRow; row++)
         {
-            var worksheet = workbook.Worksheet(1);
-            var lastRow = worksheet.LastRowUsed().RowNumber();
-
-            for (int row = startRow; row <= lastRow; row++)
+            try
             {
-                try
+                var record = new ExcelRecord
                 {
-                    var record = new ExcelRecord
-                    {
-                        RowNumber = row,
-                        RegistrationNumber = worksheet.Cell(row, 3).GetString().Trim(),  // Столбец c
-                        DocumentName = worksheet.Cell(row, 5).GetString().Trim(),       // Столбец e
-                        CertificateNumber = worksheet.Cell(row, 6).GetString().Trim(),  // Столбец f
-                        IssueDate = FormatDate(worksheet.Cell(row, 7).GetString().Trim()), // Столбец g
-                        FullName = worksheet.Cell(row, 8).GetString().Trim(),           // Столбец h
-                        ProgramName = worksheet.Cell(row, 9).GetString().Trim(),        // Столбец i
-                        Hours = worksheet.Cell(row, 15).GetString().Trim()             // Столбец o
-                    };
+                    RowNumber = row,
+                    RegistrationNumber = worksheet.Cell(row, (int)ExcelColumns.RegistrationNumber).GetString().Trim(),
+                    DocumentName = worksheet.Cell(row, (int)ExcelColumns.DocumentName).GetString().Trim(),
+                    CertificateNumber = worksheet.Cell(row, (int)ExcelColumns.CertificateNumber).GetString().Trim(),
+                    IssueDate = FormatDate(worksheet.Cell(row, (int)ExcelColumns.IssueDate).GetString().Trim()),
+                    FullName = worksheet.Cell(row, (int)ExcelColumns.FullName).GetString().Trim(),
+                    ProgramName = worksheet.Cell(row, (int)ExcelColumns.ProgramName).GetString().Trim(),
+                    Hours = worksheet.Cell(row, (int)ExcelColumns.Hours).GetString().Trim()
+                };
 
-                    var key = $"{record.FullName}_{record.CertificateNumber}_{record.IssueDate}";
-                    records[key] = record;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Ошибка обработки строки {row}: {ex.Message}");
-                }
+                var key = $"{record.FullName}_{record.CertificateNumber}_{record.IssueDate}";
+                records[key] = record;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error processing row {row}: {ex.Message}");
             }
         }
 

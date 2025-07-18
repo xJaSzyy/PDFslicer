@@ -10,6 +10,8 @@ namespace PDFSlicer.Processing;
 
 public static class PdfProcessor
 {
+    private const string DefaultProgramName = "Program";
+    
     public static PdfInfo ParsePdfName(string fileName)
     {
         var parts = fileName.Split('_');
@@ -17,7 +19,7 @@ public static class PdfProcessor
         {
             CertificateRange = parts.Length > 0 ? parts[0] : "Unknown",
             IssueDate = parts.Length > 1 ? FormatDate(parts[1]) : "01.01.00",
-            ProgramName = parts.Length > 2 ? ShortenProgramName(parts[2]) : "Program",
+            ProgramName = parts.Length > 2 ? ShortenProgramName(parts[2]) : DefaultProgramName,
             Hours = parts.Length > 3 ? parts[3] : "Hours"
         };
     }
@@ -46,7 +48,7 @@ public static class PdfProcessor
     {
         if (string.IsNullOrWhiteSpace(programName))
         {
-            return "Program";
+            return DefaultProgramName;
         }
 
         var words = programName.Split(' ');
@@ -63,16 +65,17 @@ public static class PdfProcessor
 
     private static string RemoveInvalidChars(string input)
     {
-        var invalidChars = System.IO.Path.GetInvalidFileNameChars();
+        var invalidChars = Path.GetInvalidFileNameChars();
         return new string(input.Where(c => !invalidChars.Contains(c)).ToArray());
     }
 
     private static string FormatDate(string date)
     {
-        if (date.Length == 8) // dd.MM.yy
-            return date;
-        if (date.Length == 5) // dd.MM
-            return $"{date}.{DateTime.Now:yy}";
-        return "01.01.00";
+        return date.Length switch
+        {
+            8 => date, // dd.MM.yy
+            5 => $"{date}.{DateTime.Now:yy}", // dd.MM
+            _ => "01.01.00"
+        };
     }
 }
