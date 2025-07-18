@@ -97,7 +97,7 @@ namespace PDFSlicer
                 for (int i = 0; i < document.PageCount; i++)
                 {
                     var page = document.Pages[i];
-                    var record = PdfProcessor.FindMatchingRecord(pdfInfo, excelData, i + 1);
+                    var record = PdfProcessor.FindMatchingRecord(excelData, i + 1);
 
                     if (record != null)
                     {
@@ -197,7 +197,7 @@ namespace PDFSlicer
             };
         }
 
-        public static ExcelRecord FindMatchingRecord(PdfInfo pdfInfo, Dictionary<string, ExcelRecord> excelData, int pageNumber)
+        public static ExcelRecord FindMatchingRecord(Dictionary<string, ExcelRecord> excelData, int pageNumber)
         {
             // Simple matching logic based on page order
             return excelData.Values.Skip(pageNumber - 1).FirstOrDefault();
