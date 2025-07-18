@@ -1,0 +1,56 @@
+﻿<Window x:Class="PDFSlicer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDFSlicer"
+        mc:Ignorable="d"
+        Title="PDF слайсер" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Excel-файл" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="txtExcelPath" IsReadOnly="True" Margin="5"/>
+                <Button Grid.Column="1" Content="Выбрать..." Click="BtnBrowseExcel_Click" Margin="5" Width="100"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="PDF-файлы" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ListBox x:Name="lstPdfFiles" Height="80" Margin="5"/>
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <Button Content="Добавить PDF..." Click="BtnAddPdf_Click" Margin="5" Width="100"/>
+                    <Button Content="Очистить" Click="BtnClearPdf_Click" Margin="5" Width="100"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Начальная строка в таблице" Margin="0,0,0,10">
+            <TextBox x:Name="txtStartRow" Text="2" Margin="5"/>
+        </GroupBox>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <ProgressBar x:Name="progressBar" Width="200" Height="20" Margin="5" IsIndeterminate="False"/>
+            <Button Content="Разделить" Click="BtnProcess_Click" Width="110" Height="40" Margin="5"/>
+        </StackPanel>
+
+        <GroupBox Grid.Row="4" Header="Log">
+            <TextBox x:Name="txtLog" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        </GroupBox>
+    </Grid>
+</Window>
