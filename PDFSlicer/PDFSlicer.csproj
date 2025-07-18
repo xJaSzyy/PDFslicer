@@ -239,6 +239,8 @@
   <ItemGroup>
     <Compile Include="Models\ExcelRecord.cs" />
     <Compile Include="Models\PdfInfo.cs" />
+    <Compile Include="Processing\ExcelParser.cs" />
+    <Compile Include="Processing\PdfProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
